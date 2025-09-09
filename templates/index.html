@@ -1,0 +1,89 @@
+{% extends "master.html" %} 
+
+
+{% block header %}
+    <h1 class="h3 mb-0 text-center  mt-4 ">Welcome To <span class="text-warning">Shopping Mart</span></h1>
+{% endblock header %}
+
+{% block body %}
+
+{% for category_name, subcategories in category_data.items %}
+<section style="margin:30px 0;">
+    <h2 style="margin-left:40px; font-size:24px; font-weight:700; color:#222;" class="text-decoration-underline">
+        {{ category_name }}
+    </h2>
+
+    {% for sub in subcategories %}
+        <h4 style="margin-left:40px; font-size:18px; font-weight:600; color:#444;">
+            {{ sub.subcategory.name }}
+        </h4>
+
+        <!-- Carousel Container -->
+        <div style="position:relative; overflow:hidden; padding:20px 40px;">
+            
+            <!-- Scrollable Product Row -->
+            <div class="product-row" 
+                 style="display:flex; gap:20px; overflow-x:auto; scroll-behavior:smooth; padding-bottom:10px;">
+                 
+                {% for product in sub.products %}
+                    <!-- Product Card -->
+                    <div style="flex:0 0 220px; 
+                                border:1px solid #ddd; 
+                                padding:5px; 
+                                border-radius:12px; 
+                                background:#fff; 
+                                box-shadow:0px 4px 10px rgba(0,0,0,0.08);
+                                transition:transform 0.2s ease-in-out;
+                                display:flex; 
+                                flex-direction:column; 
+                                justify-content:space-between; 
+                                height:380px; 
+                                text-align:center;">
+
+                        {% if product.image %}
+                            
+                              <a href="{% url 'product_detail' product.id %}">
+                              <img src="{{ product.image.url }}" 
+                                 style="width:190px; height:240px; object-fit:cover; border-radius:8px; margin:0 auto;" 
+                                 alt="{{ product.name }}">
+                              </a>
+                        {% endif %}
+
+                        <div>
+                            <h5 style="margin:10px 0 5px 0; font-size:16px; font-weight:600; color:#333;">
+                                {{ product.name }}
+                            </h5>
+                            <p style="margin:0; font-size:15px; font-weight:bold; color:#3ba31b;">
+                                ₹{{ product.price }}
+                            </p>
+                        </div>
+
+                        <!-- Button fixed at bottom -->
+                        <a href="{% url 'cart_add' product.id %}" 
+                           style="background:#28a745; color:white; text-decoration:none; 
+                                  display:inline-block; padding:8px 14px; border-radius:6px; font-size:14px;">
+                            Add to Cart
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Left/Right Arrows -->
+            <button onclick="scrollRow(this, -1)" 
+                    style="position:absolute; top:50%; left:5px; transform:translateY(-50%); 
+                            color:#000000; border:none; padding:10px; cursor:pointer; border-radius:50%; z-index:10;">
+                &#10094;
+            </button>
+            
+            <button onclick="scrollRow(this, 1)" 
+                    style="position:absolute; top:50%; right:5px; transform:translateY(-50%); 
+                            color:#0e0d0d; border:none; padding:10px; cursor:pointer; border-radius:50%; z-index:10;">
+                &#10095;
+            </button>
+        </div>
+    {% endfor %}
+</section>
+<hr>
+{% endfor %}
+
+{% endblock body %}
